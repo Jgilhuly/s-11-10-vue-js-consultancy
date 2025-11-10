@@ -3,7 +3,7 @@ import express from 'express';
 const router = express.Router();
 
 // Mock data for AI services
-const services = [
+export const services = [
   {
     id: 1,
     title: "AI Strategy Consulting",
@@ -102,6 +102,87 @@ router.get('/:id', (req, res) => {
   }
   
   res.json(service);
+});
+
+// POST /api/services - Create a new service
+router.post('/', (req, res) => {
+  const { title, description, icon, features, price } = req.body;
+  
+  // Basic validation
+  if (!title || !description || !icon) {
+    return res.status(400).json({
+      error: 'Missing required fields',
+      message: 'Title, description, and icon are required'
+    });
+  }
+  
+  // Generate new ID
+  const newId = services.length > 0 
+    ? Math.max(...services.map(s => s.id)) + 1 
+    : 1;
+  
+  const newService = {
+    id: newId,
+    title,
+    description,
+    icon,
+    features: features || [],
+    price: price || 'Contact for pricing'
+  };
+  
+  services.push(newService);
+  
+  res.status(201).json({
+    message: 'Service created successfully',
+    service: newService
+  });
+});
+
+// PUT /api/services/:id - Update a service
+router.put('/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const serviceIndex = services.findIndex(s => s.id === id);
+  
+  if (serviceIndex === -1) {
+    return res.status(404).json({ 
+      error: 'Service not found',
+      message: `Service with ID ${id} does not exist`
+    });
+  }
+  
+  const { title, description, icon, features, price } = req.body;
+  
+  // Update service with new data (only update provided fields)
+  if (title !== undefined) services[serviceIndex].title = title;
+  if (description !== undefined) services[serviceIndex].description = description;
+  if (icon !== undefined) services[serviceIndex].icon = icon;
+  if (features !== undefined) services[serviceIndex].features = features;
+  if (price !== undefined) services[serviceIndex].price = price;
+  
+  res.json({
+    message: 'Service updated successfully',
+    service: services[serviceIndex]
+  });
+});
+
+// DELETE /api/services/:id - Delete a service
+router.delete('/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const serviceIndex = services.findIndex(s => s.id === id);
+  
+  if (serviceIndex === -1) {
+    return res.status(404).json({ 
+      error: 'Service not found',
+      message: `Service with ID ${id} does not exist`
+    });
+  }
+  
+  const deletedService = services.splice(serviceIndex, 1)[0];
+  
+  res.json({
+    message: 'Service deleted successfully',
+    service: deletedService
+  });
 });
 
 export default router;
