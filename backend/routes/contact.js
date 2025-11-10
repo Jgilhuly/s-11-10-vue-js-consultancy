@@ -33,7 +33,7 @@ const contactInfo = {
 };
 
 // Demo consultation requests storage (in production, this would be a database)
-let consultationRequests = [];
+export let consultationRequests = [];
 
 // GET /api/contact - Get contact information
 router.get('/', (req, res) => {

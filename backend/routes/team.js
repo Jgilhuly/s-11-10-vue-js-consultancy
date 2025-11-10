@@ -3,7 +3,7 @@ import express from 'express';
 const router = express.Router();
 
 // Mock data for team members
-const team = [
+export const team = [
   {
     id: 1,
     name: "Dr. Sarah Chen",

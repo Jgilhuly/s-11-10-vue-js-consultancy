@@ -9,6 +9,7 @@ import { dirname, join } from 'path';
 import servicesRouter from './routes/services.js';
 import teamRouter from './routes/team.js';
 import contactRouter from './routes/contact.js';
+import dashboardRouter from './routes/dashboard.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -27,6 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/services', servicesRouter);
 app.use('/api/team', teamRouter);
 app.use('/api/contact', contactRouter);
+app.use('/api/dashboard', dashboardRouter);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -47,6 +49,7 @@ app.get('/api', (req, res) => {
       '/api/services',
       '/api/team',
       '/api/contact',
+      '/api/dashboard',
     ]
   });
 });
